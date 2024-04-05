@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: springhwl3
+  datasource:
+    url: jdbc:h2:mem:test
+    username: meg
+    password:
+    driver-class-name: org.h2.Driver

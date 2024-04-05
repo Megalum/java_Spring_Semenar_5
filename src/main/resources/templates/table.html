@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Table page</title>
+</head>
+<body>
+    <table>
+        <tr style="border: 1px solid black">
+            <th style="border: 1px solid black">Книга</th>
+            <th style="border: 1px solid black">Читатель</th>
+            <th style="border: 1px solid black">Взял</th>
+            <th style="border: 1px solid black">Вернул </th>
+        </tr>
+        <tr th:each="person: ${table}" style="border: 1px solid black">
+            <td th:text="${person.getBook()}" style="border: 1px solid black"></td>
+            <td th:text="${person.getReader()}" style="border: 1px solid black"></td>
+            <td th:text="${person.getReceiving()}" style="border: 1px solid black"></td>
+            <td th:text="${person.getRefund()}" style="border: 1px solid black"></td>
+        </tr>
+
+    </table>
+</body>
+</html>
