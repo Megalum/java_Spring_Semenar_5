@@ -18,7 +18,17 @@ public class Reader {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "login")
+    private String login;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "role")
+    private String role;
+
     public Reader(String name) {
         this.name = name;
     }
+
 }
