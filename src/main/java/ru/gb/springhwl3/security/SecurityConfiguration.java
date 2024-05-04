@@ -2,8 +2,10 @@ package ru.gb.springhwl3.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
@@ -13,6 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfiguration {
 
     @Bean
@@ -29,9 +32,11 @@ public class SecurityConfiguration {
 
         return httpSecurity
                 .authorizeHttpRequests(registry -> registry
-                        .requestMatchers("ui/books/**").hasAnyAuthority("user", "admin")
                         .requestMatchers("ui/**").hasAuthority("admin")
-                        .anyRequest().denyAll()
+                        .requestMatchers("ui/books/**").authenticated()
+                        .requestMatchers("/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "book/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "book/**").permitAll()
                 )
                 .formLogin(Customizer.withDefaults())
                 .build();

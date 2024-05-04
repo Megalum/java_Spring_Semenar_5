@@ -3,12 +3,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.gb.springhwl3.controllers.BookRequest;
 import ru.gb.springhwl3.controllers.NameRequest;
+import ru.gb.springhwl3.dto.BookDto;
 import ru.gb.springhwl3.entity.Book;
 import ru.gb.springhwl3.repository.BookRepository;
 
+import java.nio.channels.FileChannel;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -28,22 +31,35 @@ public class BookService {
         bookRepository.save(new Book("Семеро козлят"));
     }
 
-    public Book getBook(BookRequest request){
-        return bookRepository.getReferenceById(request.getId());
+    public Optional<BookDto> getBook(long id){
+        return bookRepository.findById(id)
+                .map(this::mapToDto);
     }
 
-    public Book createBook(NameRequest request){
-        Book book = new Book(request.getName());
-        bookRepository.save(new Book(request.getName()));
+    public Optional<BookDto> createBook(String name){
+        Book book = bookRepository.save(new Book(name));
+        Optional<BookDto> bookDto = bookRepository.findById(book.getId())
+                .map(this::mapToDto);
+        return bookDto;
+    }
+
+    public Optional<BookDto> delBook(long id){
+        Optional<BookDto> book = bookRepository.findById(id)
+                .map(this::mapToDto);
+        bookRepository.deleteById(id);
         return book;
     }
 
-    public Book delBook(BookRequest request){
-        bookRepository.deleteById(request.getId());
-        return bookRepository.getReferenceById(request.getId());
+    public List<BookDto> getAll() {
+        return bookRepository.findAll().stream()
+                .map(this::mapToDto)
+                .toList();
     }
 
-    public List<Book> booksList(){
-        return bookRepository.findAll();
+    private BookDto mapToDto(Book book){
+        BookDto bookDto = new BookDto();
+        bookDto.setId(book.getId());
+        bookDto.setName(book.getName());
+        return bookDto;
     }
 }

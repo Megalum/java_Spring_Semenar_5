@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.gb.springhwl3.dto.BookDto;
 import ru.gb.springhwl3.entity.Book;
 import ru.gb.springhwl3.services.BookService;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -19,46 +21,37 @@ import java.util.Optional;
 public class BookController {
 
     @Autowired
-    private BookService service;
-
-    /*
-        GET - получение записей
-        POST - создание записей
-        PUT - изменение записей
-        DELETE - запрос на удаление ресурса
-     */
+    private final BookService service;
 
     @GetMapping
-    public ResponseEntity<Book> getBook(@RequestBody BookRequest bookRequest){
-        log.info("Поступил запрос на просмотр: book={}"
-                , bookRequest.getId());
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(service.getBook(bookRequest));
-        } catch (NoSuchElementException e){
-            return ResponseEntity.notFound().build();
-        }
+    public List<BookDto> getBookAll(){
+        return service.getAll();
     }
 
-    @DeleteMapping
-    public ResponseEntity<Book> delBook(@RequestBody BookRequest bookRequest){
-        log.info("Поступил запрос на удаление: book={}"
-                , bookRequest.getId());
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(service.delBook(bookRequest));
-        } catch (NoSuchElementException e){
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("{id}")
+    public ResponseEntity<BookDto> getBook(@PathVariable long id){
+        log.info("Поступил запрос на просмотр: book={}", id);
+        return service.getBook(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<Book> postBook(@RequestBody NameRequest nameRequest){
-        log.info("Поступил запрос на добавление книги: name={}"
-                , nameRequest.getName());
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(service.createBook(nameRequest));
-        } catch (NoSuchElementException e){
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("{id}")
+    public ResponseEntity<BookDto> delBook(@PathVariable long id){
+        log.info("Поступил запрос на удаление: book={}", id);
+        return service.delBook(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
+
+    @PostMapping("{title}")
+    public ResponseEntity<BookDto> postBook(@PathVariable String title){
+        log.info("Поступил запрос на добавление книги: name={}", title);
+        return service.createBook(title)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+
 
 }

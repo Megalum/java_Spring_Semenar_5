@@ -28,7 +28,7 @@ public class MyController {
 
     @GetMapping("ui/books")
     public String booksList(Model model){
-        model.addAttribute("list", booksService.booksList());
+        model.addAttribute("list", booksService.getAll());
         return "list";
     }
 
@@ -45,7 +45,7 @@ public class MyController {
         issueService.refund(4);
         for (Issue out: issueService.issuesList()){
             tables.add(new Table(readerService.readersList().get((int) out.getIdReader()).getName(),
-                    booksService.booksList().get((int) out.getIdBook()).getName(),
+                    booksService.getAll().get((int) out.getIdBook()).getName(),
                     out.getReceiving(), out.getRefund()));
         }
         model.addAttribute("table", tables);
