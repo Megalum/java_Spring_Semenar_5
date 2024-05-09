@@ -11,6 +11,7 @@ import ru.gb.springhwl3.controllers.properties.MyMetric;
 import ru.gb.springhwl3.dto.IssueDto;
 import ru.gb.springhwl3.entity.Issue;
 import ru.gb.springhwl3.repository.IssueRepository;
+import ru.gb.springhwl3.repository.ReaderRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class IssueService {
 
     private final IssueRepository issueRepository;
+    private final ReaderRepository readerRepository;
     private final MyMetric bookCounter;
 
     @EventListener(ContextRefreshedEvent.class)
@@ -57,6 +59,11 @@ public class IssueService {
     public Optional<IssueDto> createIssue(IssueRequest request){
 
         if (searchReader(request.getReaderId())) {
+            bookCounter.setRefusalCounter();
+            return Optional.empty();
+        }
+
+        if (readerRepository.findById(request.getReaderId()).isEmpty()){
             bookCounter.setRefusalCounter();
             return Optional.empty();
         }
