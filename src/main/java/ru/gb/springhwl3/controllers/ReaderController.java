@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.gb.springhwl3.controllers.properties.BookRequest;
+import ru.gb.springhwl3.controllers.properties.NameRequest;
 import ru.gb.springhwl3.entity.Issue;
 import ru.gb.springhwl3.entity.Reader;
 import ru.gb.springhwl3.services.IssueService;
@@ -13,7 +15,6 @@ import ru.gb.springhwl3.services.ReaderService;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -25,14 +26,6 @@ public class ReaderController {
     private ReaderService service;
     @Autowired
     private IssueService iService;
-
-
-    /*
-        GET - получение записей
-        POST - создание записей
-        PUT - изменение записей
-        DELETE - запрос на удаление ресурса
-     */
 
     @GetMapping
     public ResponseEntity<Reader> getReader(@RequestBody BookRequest readerRequest){

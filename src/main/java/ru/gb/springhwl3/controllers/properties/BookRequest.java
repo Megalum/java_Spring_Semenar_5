@@ -1,4 +1,4 @@
-package ru.gb.springhwl3.controllers;
+package ru.gb.springhwl3.controllers.properties;
 
 import lombok.Data;
 

@@ -16,8 +16,9 @@ import ru.gb.springhwl3.repository.BookRepository;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ActiveProfiles("noauth")
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
+
 public class BookControllersPostDelTest {
 
     @Autowired

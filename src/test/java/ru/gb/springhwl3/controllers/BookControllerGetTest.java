@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @AutoConfigureWebTestClient
-@ActiveProfiles("noauth")
+@ActiveProfiles("test")
 class BookControllerGetTest {
 
     @Autowired
